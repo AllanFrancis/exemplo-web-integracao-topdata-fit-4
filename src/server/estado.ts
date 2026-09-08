@@ -40,6 +40,31 @@ export async function salvarGateway(gateway: GatewayConhecido): Promise<void> {
 }
 
 /**
+ * Devolve o registro do Gateway, criando um se ele nao existir.
+ *
+ * Parece indulgente, mas nao e: quem chega aqui ja apresentou um token valido, e o
+ * token *e* a prova de identidade. Exigir um registro previo criava um jeito silencioso
+ * de ficar cego — o provisionamento acontece uma unica vez, entao qualquer perda do
+ * registro (instancia reciclada, memoria de outra instancia, banco recriado) deixava o
+ * Gateway mandando heartbeat para sempre sem nunca reaparecer no painel.
+ */
+async function garantirGateway(gatewayId: string): Promise<GatewayConhecido> {
+  const existente = (await lerGateways()).find((item) => item.gatewayId === gatewayId);
+  if (existente) return existente;
+
+  const novo: GatewayConhecido = {
+    gatewayId,
+    gatewayName: "Recepcao",
+    tenantName: process.env["NOME_DA_ACADEMIA"] ?? "Academia Exemplo",
+    provisionadoEm: new Date().toISOString(),
+    dispositivos: [],
+  };
+
+  await salvarGateway(novo);
+  return novo;
+}
+
+/**
  * Atualiza o que o heartbeat traz. Os dispositivos sao *mesclados*, nunca substituidos:
  * um heartbeat parcial nao pode apagar da tela um equipamento que existe.
  */
@@ -52,9 +77,7 @@ export async function registrarContato(
     dispositivos?: DispositivoConhecido[];
   },
 ): Promise<void> {
-  const gateways = await lerGateways();
-  const gateway = gateways.find((item) => item.gatewayId === gatewayId);
-  if (!gateway) return;
+  const gateway = await garantirGateway(gatewayId);
 
   const porId = new Map(gateway.dispositivos.map((d) => [d.deviceId, d]));
   for (const dispositivo of dados.dispositivos ?? []) {
@@ -77,9 +100,8 @@ export async function registrarContato(
  * transformar um erro de digitacao numa catraca invisivel.
  */
 export async function garantirDispositivo(gatewayId: string, deviceId: string): Promise<void> {
-  const gateways = await lerGateways();
-  const gateway = gateways.find((item) => item.gatewayId === gatewayId);
-  if (!gateway || gateway.dispositivos.some((d) => d.deviceId === deviceId)) return;
+  const gateway = await garantirGateway(gatewayId);
+  if (gateway.dispositivos.some((d) => d.deviceId === deviceId)) return;
 
   await salvarGateway({
     ...gateway,
