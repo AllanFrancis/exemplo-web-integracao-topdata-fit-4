@@ -42,24 +42,40 @@ export default defineHandler(async (event) => {
     return new Response("Token ausente, invalido ou expirado.", { status: 401 });
   }
 
-  return experimental_upgradeWebSocket((ws) => {
-    console.log(`[ws] gateway ${gatewayId} conectado`);
-    avisarSeArmazenamentoVolatil();
+  try {
+    return await experimental_upgradeWebSocket((ws) => {
+      console.log(`[ws] gateway ${gatewayId} conectado`);
+      avisarSeArmazenamentoVolatil();
 
-    const encerrar = iniciarEntregaDeComandos(gatewayId, (mensagem) => ws.send(mensagem));
+      const encerrar = iniciarEntregaDeComandos(gatewayId, (mensagem) => ws.send(mensagem));
 
-    ws.on("message", (dados: WebSocketData) => {
-      void receberDoGateway(gatewayId, dados.toString());
+      ws.on("message", (dados: WebSocketData) => {
+        void receberDoGateway(gatewayId, dados.toString());
+      });
+
+      ws.on("close", () => {
+        encerrar();
+        console.log(`[ws] gateway ${gatewayId} desconectado`);
+      });
+
+      ws.on("error", (erro: Error) => {
+        encerrar();
+        console.error(`[ws] erro na ligacao com ${gatewayId}:`, erro);
+      });
     });
+  } catch (erro) {
+    // O upgrade depende da plataforma, não do nosso código: ele falha quando o
+    // WebSocket não está habilitado no projeto. Um 500 vazio deixaria quem instala
+    // adivinhando; o motivo vai no corpo, e o Gateway agora registra esse corpo no log
+    // dele. A ligação cair não interrompe nada do caminho crítico.
+    console.error("[ws] a plataforma recusou o upgrade:", erro);
 
-    ws.on("close", () => {
-      encerrar();
-      console.log(`[ws] gateway ${gatewayId} desconectado`);
-    });
-
-    ws.on("error", (erro: Error) => {
-      encerrar();
-      console.error(`[ws] erro na ligacao com ${gatewayId}:`, erro);
-    });
-  });
+    return new Response(
+      JSON.stringify({
+        error: "WEBSOCKET_UPGRADE_FAILED",
+        detail: erro instanceof Error ? erro.message : String(erro),
+      }),
+      { status: 501, headers: { "content-type": "application/json; charset=utf-8" } },
+    );
+  }
 });
