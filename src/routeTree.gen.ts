@@ -19,7 +19,6 @@ import { Route as ApiComandosRouteImport } from './routes/api/comandos'
 import { Route as ApiPainelRouteImport } from './routes/api/painel'
 import { Route as GatewayAuthRouteImport } from './routes/gateway/auth'
 import { Route as GatewayProvisionRouteImport } from './routes/gateway/provision'
-import { Route as GatewayWsRouteImport } from './routes/gateway/ws'
 import { Route as InternalAccessValidateRouteImport } from './routes/internal/access/validate'
 import { Route as InternalGatewayGatewayIdCommandsRouteImport } from './routes/internal/gateway/$gatewayId/commands'
 import { Route as InternalGatewayGatewayIdEventsRouteImport } from './routes/internal/gateway/$gatewayId/events'
@@ -74,11 +73,6 @@ const GatewayProvisionRoute = GatewayProvisionRouteImport.update({
   path: '/gateway/provision',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GatewayWsRoute = GatewayWsRouteImport.update({
-  id: '/gateway/ws',
-  path: '/gateway/ws',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const InternalAccessValidateRoute = InternalAccessValidateRouteImport.update({
   id: '/internal/access/validate',
   path: '/internal/access/validate',
@@ -108,7 +102,6 @@ export interface FileRoutesByFullPath {
   '/api/painel': typeof ApiPainelRoute
   '/gateway/auth': typeof GatewayAuthRoute
   '/gateway/provision': typeof GatewayProvisionRoute
-  '/gateway/ws': typeof GatewayWsRoute
   '/internal/access/validate': typeof InternalAccessValidateRoute
   '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
   '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
@@ -124,7 +117,6 @@ export interface FileRoutesByTo {
   '/api/painel': typeof ApiPainelRoute
   '/gateway/auth': typeof GatewayAuthRoute
   '/gateway/provision': typeof GatewayProvisionRoute
-  '/gateway/ws': typeof GatewayWsRoute
   '/internal/access/validate': typeof InternalAccessValidateRoute
   '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
   '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
@@ -141,7 +133,6 @@ export interface FileRoutesById {
   '/api/painel': typeof ApiPainelRoute
   '/gateway/auth': typeof GatewayAuthRoute
   '/gateway/provision': typeof GatewayProvisionRoute
-  '/gateway/ws': typeof GatewayWsRoute
   '/internal/access/validate': typeof InternalAccessValidateRoute
   '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
   '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
@@ -159,7 +150,6 @@ export interface FileRouteTypes {
     | '/api/painel'
     | '/gateway/auth'
     | '/gateway/provision'
-    | '/gateway/ws'
     | '/internal/access/validate'
     | '/internal/gateway/$gatewayId/commands'
     | '/internal/gateway/$gatewayId/events'
@@ -175,7 +165,6 @@ export interface FileRouteTypes {
     | '/api/painel'
     | '/gateway/auth'
     | '/gateway/provision'
-    | '/gateway/ws'
     | '/internal/access/validate'
     | '/internal/gateway/$gatewayId/commands'
     | '/internal/gateway/$gatewayId/events'
@@ -191,7 +180,6 @@ export interface FileRouteTypes {
     | '/api/painel'
     | '/gateway/auth'
     | '/gateway/provision'
-    | '/gateway/ws'
     | '/internal/access/validate'
     | '/internal/gateway/$gatewayId/commands'
     | '/internal/gateway/$gatewayId/events'
@@ -208,7 +196,6 @@ export interface RootRouteChildren {
   ApiPainelRoute: typeof ApiPainelRoute
   GatewayAuthRoute: typeof GatewayAuthRoute
   GatewayProvisionRoute: typeof GatewayProvisionRoute
-  GatewayWsRoute: typeof GatewayWsRoute
   InternalAccessValidateRoute: typeof InternalAccessValidateRoute
   InternalGatewayGatewayIdCommandsRoute: typeof InternalGatewayGatewayIdCommandsRoute
   InternalGatewayGatewayIdEventsRoute: typeof InternalGatewayGatewayIdEventsRoute
@@ -286,13 +273,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GatewayProvisionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gateway/ws': {
-      id: '/gateway/ws'
-      path: '/gateway/ws'
-      fullPath: '/gateway/ws'
-      preLoaderRoute: typeof GatewayWsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/internal/access/validate': {
       id: '/internal/access/validate'
       path: '/internal/access/validate'
@@ -328,7 +308,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPainelRoute: ApiPainelRoute,
   GatewayAuthRoute: GatewayAuthRoute,
   GatewayProvisionRoute: GatewayProvisionRoute,
-  GatewayWsRoute: GatewayWsRoute,
   InternalAccessValidateRoute: InternalAccessValidateRoute,
   InternalGatewayGatewayIdCommandsRoute: InternalGatewayGatewayIdCommandsRoute,
   InternalGatewayGatewayIdEventsRoute: InternalGatewayGatewayIdEventsRoute,
