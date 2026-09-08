@@ -10,33 +10,208 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlunosRouteImport } from './routes/alunos'
+import { Route as EventosRouteImport } from './routes/eventos'
+import { Route as InstalacaoRouteImport } from './routes/instalacao'
+import { Route as SimuladorRouteImport } from './routes/simulador'
+import { Route as ApiAlunosRouteImport } from './routes/api/alunos'
+import { Route as ApiComandosRouteImport } from './routes/api/comandos'
+import { Route as ApiPainelRouteImport } from './routes/api/painel'
+import { Route as GatewayAuthRouteImport } from './routes/gateway/auth'
+import { Route as GatewayProvisionRouteImport } from './routes/gateway/provision'
+import { Route as GatewayWsRouteImport } from './routes/gateway/ws'
+import { Route as InternalAccessValidateRouteImport } from './routes/internal/access/validate'
+import { Route as InternalGatewayGatewayIdCommandsRouteImport } from './routes/internal/gateway/$gatewayId/commands'
+import { Route as InternalGatewayGatewayIdEventsRouteImport } from './routes/internal/gateway/$gatewayId/events'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlunosRoute = AlunosRouteImport.update({
+  id: '/alunos',
+  path: '/alunos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventosRoute = EventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstalacaoRoute = InstalacaoRouteImport.update({
+  id: '/instalacao',
+  path: '/instalacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladorRoute = SimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAlunosRoute = ApiAlunosRouteImport.update({
+  id: '/api/alunos',
+  path: '/api/alunos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiComandosRoute = ApiComandosRouteImport.update({
+  id: '/api/comandos',
+  path: '/api/comandos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPainelRoute = ApiPainelRouteImport.update({
+  id: '/api/painel',
+  path: '/api/painel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GatewayAuthRoute = GatewayAuthRouteImport.update({
+  id: '/gateway/auth',
+  path: '/gateway/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GatewayProvisionRoute = GatewayProvisionRouteImport.update({
+  id: '/gateway/provision',
+  path: '/gateway/provision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GatewayWsRoute = GatewayWsRouteImport.update({
+  id: '/gateway/ws',
+  path: '/gateway/ws',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalAccessValidateRoute = InternalAccessValidateRouteImport.update({
+  id: '/internal/access/validate',
+  path: '/internal/access/validate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalGatewayGatewayIdCommandsRoute =
+  InternalGatewayGatewayIdCommandsRouteImport.update({
+    id: '/internal/gateway/$gatewayId/commands',
+    path: '/internal/gateway/$gatewayId/commands',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const InternalGatewayGatewayIdEventsRoute =
+  InternalGatewayGatewayIdEventsRouteImport.update({
+    id: '/internal/gateway/$gatewayId/events',
+    path: '/internal/gateway/$gatewayId/events',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alunos': typeof AlunosRoute
+  '/eventos': typeof EventosRoute
+  '/instalacao': typeof InstalacaoRoute
+  '/simulador': typeof SimuladorRoute
+  '/api/alunos': typeof ApiAlunosRoute
+  '/api/comandos': typeof ApiComandosRoute
+  '/api/painel': typeof ApiPainelRoute
+  '/gateway/auth': typeof GatewayAuthRoute
+  '/gateway/provision': typeof GatewayProvisionRoute
+  '/gateway/ws': typeof GatewayWsRoute
+  '/internal/access/validate': typeof InternalAccessValidateRoute
+  '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
+  '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alunos': typeof AlunosRoute
+  '/eventos': typeof EventosRoute
+  '/instalacao': typeof InstalacaoRoute
+  '/simulador': typeof SimuladorRoute
+  '/api/alunos': typeof ApiAlunosRoute
+  '/api/comandos': typeof ApiComandosRoute
+  '/api/painel': typeof ApiPainelRoute
+  '/gateway/auth': typeof GatewayAuthRoute
+  '/gateway/provision': typeof GatewayProvisionRoute
+  '/gateway/ws': typeof GatewayWsRoute
+  '/internal/access/validate': typeof InternalAccessValidateRoute
+  '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
+  '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alunos': typeof AlunosRoute
+  '/eventos': typeof EventosRoute
+  '/instalacao': typeof InstalacaoRoute
+  '/simulador': typeof SimuladorRoute
+  '/api/alunos': typeof ApiAlunosRoute
+  '/api/comandos': typeof ApiComandosRoute
+  '/api/painel': typeof ApiPainelRoute
+  '/gateway/auth': typeof GatewayAuthRoute
+  '/gateway/provision': typeof GatewayProvisionRoute
+  '/gateway/ws': typeof GatewayWsRoute
+  '/internal/access/validate': typeof InternalAccessValidateRoute
+  '/internal/gateway/$gatewayId/commands': typeof InternalGatewayGatewayIdCommandsRoute
+  '/internal/gateway/$gatewayId/events': typeof InternalGatewayGatewayIdEventsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/alunos'
+    | '/eventos'
+    | '/instalacao'
+    | '/simulador'
+    | '/api/alunos'
+    | '/api/comandos'
+    | '/api/painel'
+    | '/gateway/auth'
+    | '/gateway/provision'
+    | '/gateway/ws'
+    | '/internal/access/validate'
+    | '/internal/gateway/$gatewayId/commands'
+    | '/internal/gateway/$gatewayId/events'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/alunos'
+    | '/eventos'
+    | '/instalacao'
+    | '/simulador'
+    | '/api/alunos'
+    | '/api/comandos'
+    | '/api/painel'
+    | '/gateway/auth'
+    | '/gateway/provision'
+    | '/gateway/ws'
+    | '/internal/access/validate'
+    | '/internal/gateway/$gatewayId/commands'
+    | '/internal/gateway/$gatewayId/events'
+  id:
+    | '__root__'
+    | '/'
+    | '/alunos'
+    | '/eventos'
+    | '/instalacao'
+    | '/simulador'
+    | '/api/alunos'
+    | '/api/comandos'
+    | '/api/painel'
+    | '/gateway/auth'
+    | '/gateway/provision'
+    | '/gateway/ws'
+    | '/internal/access/validate'
+    | '/internal/gateway/$gatewayId/commands'
+    | '/internal/gateway/$gatewayId/events'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlunosRoute: typeof AlunosRoute
+  EventosRoute: typeof EventosRoute
+  InstalacaoRoute: typeof InstalacaoRoute
+  SimuladorRoute: typeof SimuladorRoute
+  ApiAlunosRoute: typeof ApiAlunosRoute
+  ApiComandosRoute: typeof ApiComandosRoute
+  ApiPainelRoute: typeof ApiPainelRoute
+  GatewayAuthRoute: typeof GatewayAuthRoute
+  GatewayProvisionRoute: typeof GatewayProvisionRoute
+  GatewayWsRoute: typeof GatewayWsRoute
+  InternalAccessValidateRoute: typeof InternalAccessValidateRoute
+  InternalGatewayGatewayIdCommandsRoute: typeof InternalGatewayGatewayIdCommandsRoute
+  InternalGatewayGatewayIdEventsRoute: typeof InternalGatewayGatewayIdEventsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +223,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alunos': {
+      id: '/alunos'
+      path: '/alunos'
+      fullPath: '/alunos'
+      preLoaderRoute: typeof AlunosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos': {
+      id: '/eventos'
+      path: '/eventos'
+      fullPath: '/eventos'
+      preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instalacao': {
+      id: '/instalacao'
+      path: '/instalacao'
+      fullPath: '/instalacao'
+      preLoaderRoute: typeof InstalacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulador': {
+      id: '/simulador'
+      path: '/simulador'
+      fullPath: '/simulador'
+      preLoaderRoute: typeof SimuladorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/alunos': {
+      id: '/api/alunos'
+      path: '/api/alunos'
+      fullPath: '/api/alunos'
+      preLoaderRoute: typeof ApiAlunosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/comandos': {
+      id: '/api/comandos'
+      path: '/api/comandos'
+      fullPath: '/api/comandos'
+      preLoaderRoute: typeof ApiComandosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/painel': {
+      id: '/api/painel'
+      path: '/api/painel'
+      fullPath: '/api/painel'
+      preLoaderRoute: typeof ApiPainelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gateway/auth': {
+      id: '/gateway/auth'
+      path: '/gateway/auth'
+      fullPath: '/gateway/auth'
+      preLoaderRoute: typeof GatewayAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gateway/provision': {
+      id: '/gateway/provision'
+      path: '/gateway/provision'
+      fullPath: '/gateway/provision'
+      preLoaderRoute: typeof GatewayProvisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gateway/ws': {
+      id: '/gateway/ws'
+      path: '/gateway/ws'
+      fullPath: '/gateway/ws'
+      preLoaderRoute: typeof GatewayWsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/access/validate': {
+      id: '/internal/access/validate'
+      path: '/internal/access/validate'
+      fullPath: '/internal/access/validate'
+      preLoaderRoute: typeof InternalAccessValidateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/gateway/$gatewayId/commands': {
+      id: '/internal/gateway/$gatewayId/commands'
+      path: '/internal/gateway/$gatewayId/commands'
+      fullPath: '/internal/gateway/$gatewayId/commands'
+      preLoaderRoute: typeof InternalGatewayGatewayIdCommandsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/gateway/$gatewayId/events': {
+      id: '/internal/gateway/$gatewayId/events'
+      path: '/internal/gateway/$gatewayId/events'
+      fullPath: '/internal/gateway/$gatewayId/events'
+      preLoaderRoute: typeof InternalGatewayGatewayIdEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlunosRoute: AlunosRoute,
+  EventosRoute: EventosRoute,
+  InstalacaoRoute: InstalacaoRoute,
+  SimuladorRoute: SimuladorRoute,
+  ApiAlunosRoute: ApiAlunosRoute,
+  ApiComandosRoute: ApiComandosRoute,
+  ApiPainelRoute: ApiPainelRoute,
+  GatewayAuthRoute: GatewayAuthRoute,
+  GatewayProvisionRoute: GatewayProvisionRoute,
+  GatewayWsRoute: GatewayWsRoute,
+  InternalAccessValidateRoute: InternalAccessValidateRoute,
+  InternalGatewayGatewayIdCommandsRoute: InternalGatewayGatewayIdCommandsRoute,
+  InternalGatewayGatewayIdEventsRoute: InternalGatewayGatewayIdEventsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

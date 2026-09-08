@@ -1,5 +1,5 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "exemplo-web-integracao-topdata-fit-4",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -9,7 +9,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "simular": "bun scripts/simular-gateway.ts",
+    "ponte": "bun ws-bridge/ponte.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

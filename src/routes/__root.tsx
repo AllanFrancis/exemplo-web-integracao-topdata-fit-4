@@ -11,6 +11,39 @@ import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 
+const PAGINAS = [
+  { para: "/", titulo: "Painel" },
+  { para: "/simulador", titulo: "Simulador" },
+  { para: "/alunos", titulo: "Alunos" },
+  { para: "/eventos", titulo: "Trilha" },
+  { para: "/instalacao", titulo: "Instalacao" },
+] as const;
+
+function Navegacao() {
+  return (
+    <header className="border-b border-border bg-card">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
+        <span className="text-sm font-semibold tracking-tight text-foreground">
+          Topdata Gateway <span className="text-muted-foreground">· sistema web de exemplo</span>
+        </span>
+        <nav className="flex flex-wrap gap-1">
+          {PAGINAS.map((pagina) => (
+            <Link
+              key={pagina.para}
+              to={pagina.para}
+              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              activeProps={{ className: "bg-accent text-foreground" }}
+              activeOptions={{ exact: pagina.para === "/" }}
+            >
+              {pagina.titulo}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -73,10 +106,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Blank Project" },
-      { name: "description", content: "A clean blank canvas to start building." },
-      { property: "og:title", content: "Blank Project" },
-      { property: "og:description", content: "A clean blank canvas to start building." },
+      { title: "Sistema web — integracao Topdata Gateway" },
+      {
+        name: "description",
+        content:
+          "Exemplo de referencia do lado servidor da integracao com a catraca Topdata FIT 4.",
+      },
+      { property: "og:title", content: "Sistema web — integracao Topdata Gateway" },
+      {
+        property: "og:description",
+        content:
+          "Exemplo de referencia do lado servidor da integracao com a catraca Topdata FIT 4.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -96,7 +137,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
@@ -113,8 +154,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="min-h-screen bg-background">
+        <Navegacao />
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </div>
     </QueryClientProvider>
   );
 }
