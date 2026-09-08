@@ -16,7 +16,7 @@ const ROTAS = [
   ["POST", "/gateway/auth", "Credencial vira token de acesso (1 h)."],
   ["POST", "/internal/access/validate", "O caminho critico. Alguem esta parado na catraca."],
   ["POST", "/internal/gateway/{gatewayId}/events", "Fila duravel: heartbeat, desfechos, giros."],
-  ["GET", "/gateway/ws", "WebSocket do contrato — indisponivel em serverless (501)."],
+  ["GET", "/gateway/ws", "WebSocket do contrato. Comandos descem por aqui."],
 ] as const;
 
 const MOTIVOS = [
@@ -127,16 +127,26 @@ function Instalacao() {
       </Secao>
 
       <Secao
-        titulo="3. Comandos para a catraca (opcional)"
-        descricao="A liberacao manual da recepcao so chega ao equipamento pelo WebSocket."
+        titulo="3. Comandos para a catraca"
+        descricao="A liberacao manual da recepcao desce pela ligacao WSS, que este sistema serve."
       >
         <p className="text-sm text-muted-foreground">
-          Funcoes serverless nao seguram conexao aberta. Para ter o caminho de volta com um Gateway
-          de verdade, rode a ponte em <code className="font-mono text-xs">ws-bridge/</code> numa
-          maquina da academia ou num servidor comum, e aponte{" "}
-          <code className="font-mono text-xs">webSocketUrl</code> para ela. A ponte fala WSS com o
-          Gateway e HTTPS com este sistema, sem nenhum segredo novo — ela apenas repassa o token que
-          o proprio Gateway envia.
+          Deixe <code className="font-mono text-xs">webSocketUrl</code> vazio: o Gateway deriva{" "}
+          <code className="font-mono text-xs">{origem.replace(/^http/, "ws")}/gateway/ws</code> da
+          propria <code className="font-mono text-xs">baseUrl</code>.
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Publicado em funcoes serverless, a ligacao cai quando a funcao atinge a duracao maxima (60
+          s no plano Hobby) e o Gateway reconecta sozinho, com recuo exponencial — isso e o
+          esperado, nao e falha. Um comando so chega a catraca se a instancia que segura a ligacao
+          enxergar a fila: com armazenamento em memoria isso e sorte, entao configure o Redis antes
+          de depender da liberacao manual.
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Se a hospedagem nao oferecer WebSocket, a ponte em{" "}
+          <code className="font-mono text-xs">ws-bridge/</code> faz esse papel: ela e o servidor WSS
+          que o Gateway ve e fala HTTPS comum com este sistema, sem nenhum segredo novo — apenas
+          repassa o token que o proprio Gateway envia.
         </p>
       </Secao>
     </main>

@@ -103,30 +103,60 @@ chegar a perguntar.
 Depois, provisione com um dos códigos aceitos (`AB73-KL92` e `DEMO-0001` por padrão) e
 o Gateway aparece no painel.
 
-## WebSocket, e por que ele não está aqui
+## WebSocket
 
-O contrato prevê uma ligação WSS permanente para os comandos que vão do servidor para a
-catraca — a liberação manual da recepção. **Funções serverless não seguram conexão
-aberta**, então `/gateway/ws` responde `501` com a explicação, em vez de deixar o
-Gateway numa reconexão silenciosa e eterna.
+`wss://<host>/gateway/ws` é real e funciona publicado — inclusive na Vercel, que passou
+a servir WebSocket sobre Fluid compute. É por ele que descem os comandos do servidor
+para a catraca (a liberação manual da recepção) e por ele que sobe a telemetria quando a
+ligação está de pé.
 
-Isso não quebra nada do caminho crítico: sem WebSocket, o Gateway entrega tudo pela fila
-durável em disco, e a validação de acesso nunca dependeu dele. O que se perde é só o
-caminho de volta.
+O caminho crítico nunca depende dele: sem WebSocket, o Gateway entrega tudo pela fila
+durável em disco e a validação de acesso continua igual. O que se perde é só o caminho
+de volta.
 
-Para ter os dois lados, rode a ponte:
+A rota tem **duas implementações**, escolhidas no build pela variável `VERCEL`
+([vite.config.ts](vite.config.ts)):
+
+| Destino                            | Arquivo                                 | Como levanta o socket                                    |
+| ---------------------------------- | --------------------------------------- | -------------------------------------------------------- |
+| local (`dev`, build `node-server`) | [ws-nitro.ts](src/server/ws-nitro.ts)   | WebSocket nativo do Nitro (crossws)                      |
+| Vercel                             | [ws-vercel.ts](src/server/ws-vercel.ts) | `experimental_upgradeWebSocket()` de `@vercel/functions` |
+
+São duas porque o preset da Vercel do Nitro gera a função da rota **sem** nenhum traço de
+crossws: o WebSocket nativo responde `426` a qualquer aperto de mão publicado. Do lado do
+Gateway não muda nada — mesmo endereço, mesmo `Authorization`, mesmos envelopes. Tudo que
+acontece depois do socket aberto é compartilhado, em
+[ws-sessao.ts](src/server/ws-sessao.ts).
+
+### O que a plataforma impõe
+
+- **A ligação morre no limite de duração da função** (60 s no Hobby, mais no Pro). É o
+  esperado, não é falha: o Gateway reconecta sozinho com recuo exponencial e sorteio.
+- **Cada conexão fica presa a uma instância.** Um comando enfileirado por
+  `POST /api/comandos` cai em outra instância e não enxerga a fila da primeira — por isso
+  **configure o Redis** antes de depender disso em produção. Em memória funciona por
+  acaso, enquanto houver só uma instância acordada.
+- **O pacote `ws` precisa estar instalado**: `experimental_upgradeWebSocket()` o usa por
+  baixo e recusa o upgrade sem ele.
+- Como o socket é consultado por sondagem da fila (uma vez por segundo), a função fica
+  acordada enquanto a ligação existir — isso é consumo faturado.
+
+No `config.json` da instalação, basta deixar `webSocketUrl` vazio: o Gateway deriva
+`wss://<mesmo host>/gateway/ws` da `baseUrl`.
+
+### A ponte, para quem não tem WebSocket na plataforma
+
+[`ws-bridge/ponte.ts`](ws-bridge/ponte.ts) continua no repositório como alternativa: um
+processo pequeno que é o servidor WSS que o Gateway vê e conversa com este sistema por
+HTTPS comum, consultando `GET /internal/gateway/{id}/commands`.
 
 ```bash
 bun run ponte https://seu-app.vercel.app 8787
 ```
 
-E aponte `"webSocketUrl": "ws://maquina-da-ponte:8787/gateway/ws"` no `config.json`. A
-ponte ([`ws-bridge/ponte.ts`](ws-bridge/ponte.ts)) é o servidor WebSocket que o Gateway
-vê, e conversa com este sistema por HTTPS comum. Ela não guarda segredo nenhum: repassa
-o próprio token que o Gateway envia no handshake.
-
-Num servidor com processo persistente (uma VM, um contêiner, Fly, Railway), nada disso é
-necessário — implemente `/gateway/ws` direto e apague a ponte.
+Serve quando a hospedagem não oferece WebSocket, ou quando se quer a ligação de pé sem o
+recorte por duração de função — rodando na própria máquina da academia, ela nem precisa
+de porta aberta no roteador.
 
 ## Armazenamento
 
